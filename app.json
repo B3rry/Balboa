@@ -1,0 +1,50 @@
+{
+    "name": "Flairtron",
+    "description": "This app helps you update, manage, and preserve aspects of user's flairs",
+    "website": "https://github.com/B3rry/survivor-flair-bot",
+    "repository": "https://github.com/B3rry/survivor-flair-bot",
+    "logo": "https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.47.1080.1080/16123836_619709238236935_8388842651243249664_n.jpg",
+    "success_url": "https://dashboard.heroku.com/",
+    "keywords": [
+        "reddit",
+        "praw",
+        "flair"
+    ],
+    "env": {
+        "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-python.git",
+        "SUBREDDIT": {
+	      "description": "Subreddit name. (Note: Don't include the '/r/') EX:'worldnews' 'Unexpected' or 'DIY'",
+	      "value": "YOUR TEAM NAME"
+	    },
+	    "USERNAME": {
+	      "description": "Your bot's username. (Note: Don't include the '/u/') EX:'myflairbot' 'gariond' or 'mysuperawesomebot'",
+	      "value": "YOUR BOT USERNAME"
+	    },
+	    "USER_PASSWORD": {
+	      "description": "Your bot's password",
+	      "value": "YOUR BOT PASSWORD"
+	    },
+	    "MESSAGE_SUBJECT": {
+	      "description": "The subject line needed for the bot to respond (Defaults to 'Flair')",
+	      "value": "Flair"
+	    },
+	    "LOGGING": {
+	      "description": "Determines if your bot will write to its log. (If you don't know what this is, leave it as 'False'.",
+	      "value": "False"
+	    },
+	    "REFRESH_INTERVAL": {
+	      "description": "How often (in seconds) you want your bot to check and update flairs. (Note: Lower settings may result in reddit restricting your bot's access.)",
+	      "value": "False"
+	    },
+	    "APP_ID": {
+	      "description": "The reddit API App ID. (Not sure what this is? Review readme.md at https://github.com/B3rry/survivor-flair-bot for instructions on how to obtain your APP_ID)",
+	      "value": "False"
+	    },
+	    "APP_SECRET": {
+	      "description": "The reddit API App Secret. (Not sure what this is? Review readme.md at https://github.com/B3rry/survivor-flair-bot for instructions on how to obtain your APP_ID)",
+	      "value": "False"
+	    },
+    },
+
+    "generator": "https://www.expeditedssl.com/heroku-button-maker"
+}
