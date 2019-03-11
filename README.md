@@ -2,6 +2,8 @@
 
 Balboa is a Python based bot that enables reddit.com's subreddit administrators to define, manage, and automate the process of handling changes to a user's flair. Features include the automatic handling and construction of flair text and CSS changes, including the dynamic constructions of these values via regex and time-based restrictions.
 
+Balboa was initially created for [/r/survivor](https://www.reddit.com/r/survivor) by [/u/gariond](https://www.reddit.com/user/Gariond) on behalf of [/u/aksurvivorfan](https://www.reddit.com/user/aksurvivorfan). Special thanks to GitHub user [gavin19](https://github.com/gavin19) for his work on [`gavin19/reddit-flair-bot`](https://github.com/gavin19/reddit-flair-bot), whose work this is bot is based upon.
+
 ## Getting Started
 
 ### Prerequisites
