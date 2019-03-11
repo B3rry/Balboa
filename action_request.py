@@ -10,11 +10,11 @@ class ActionRequest:
         # Currently, only supports 'Set Flair', you can enable other items, but do so at your own risk.
         # No permissions gate any user from executing any of these.
         requestCommand = {
-            # 'Flair': 'UPDATE_FLAIR_TEXT',
+            'Flair': 'UPDATE_FLAIR_TEXT',
             # 'User Flair': 'UPDATE_FLAIR_TEXT_BY_USER',
             'Set Flair': 'UPDATE_FLAIR_WITH_RULES',
             # 'Set User Flair': 'UPDATE_FLAIR_WITH_RULES_BY_USER',
-            # 'Update Rules': 'UPDATE_RULES',
+            'Update Rules': 'UPDATE_RULES',
             # 'Update Config': 'UPDATE_CONFIG',
             # 'Reboot': 'REBOOT',
             # 'Shutdown': 'SHUTDOWN',

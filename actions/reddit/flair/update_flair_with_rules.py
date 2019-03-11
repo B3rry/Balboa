@@ -12,6 +12,7 @@ class UpdateFlairWithRules:
     def __init__(self, payload, reddit):
         author = str(payload.author)
         content = str(payload.body)
+        # Set a default status to be overwritten
         self.status = {
             'response': 0,
             'subject': 'Flair not set',

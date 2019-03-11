@@ -3,7 +3,7 @@ import sys
 import time
 import datetime
 import praw
-from rule_parse import Rules
+from actions.reddit.flair.rule_parse import Rules
 from message_receiver import MessageReceiver
 
 class Bot:
