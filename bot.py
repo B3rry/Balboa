@@ -3,7 +3,6 @@ import sys
 import time
 import datetime
 import praw
-import flair_bot
 from rule_parse import Rules
 from message_receiver import MessageReceiver
 
@@ -44,9 +43,8 @@ class Bot:
 
     def run(self):
         print ''
-        print 'Bot: /u/' + os.environ.get("USERNAME") + 'has started. Initialized at: ' + str(datetime.datetime.now())
+        print 'Bot: /u/' + os.environ.get("USERNAME") + ' has started. Initialized at: ' + str(datetime.datetime.now())
         sys.stdout.flush()
-        # self.reddit.redditor('/r/' + os.environ.get("SUBREDDIT") ).message('Bot: /u/' + os.environ.get("USERNAME") + 'has started', 'Initialized at: ' + str(datetime.datetime.now()))
         # GET RULES
         currentRules = Rules(self.reddit).currentRules
         

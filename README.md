@@ -13,3 +13,9 @@ Balboa is a Python based bot that enables subreddit administrators to define, ma
 
 ### Installation
 * Ensure your system has all requisite packages installed
+* `pip install -r requirements.txt`
+
+
+#### Reddit
+* Obtain an `APP_ID`, and `APP_SECRET` from [reddit.com](https://www.reddit.com/prefs/apps)
+> Note: you'll need to select a type of `script` from the radio options under the 'create application' prompt.
