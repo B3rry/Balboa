@@ -8,13 +8,13 @@ from message_receiver import MessageReceiver
 
 class Bot:
 
-    subject = None
     logging = None
     conf = None
     reddit = None
     flairs = {}
 
     def __init__(self):
+        # Initializtion.
         if os.environ.get("LOGGING"):
             os.chdir(os.path.dirname(os.path.abspath(__file__)))
         else:
@@ -45,10 +45,10 @@ class Bot:
         print ''
         print 'Bot: /u/' + os.environ.get("USERNAME") + ' has started. Initialized at: ' + str(datetime.datetime.now())
         sys.stdout.flush()
-        # GET RULES
+        # Get the initial set of rules. This should probaby be split out into a separate initilization lifecycle script.
         currentRules = Rules(self.reddit).currentRules
         
-        # RUN LISTENER
+        # Starts running the bot...
         running = True
         while running:
             try:

@@ -2,6 +2,7 @@
 import os
 import json
 
+# I think this is legacy.
 class Rules:
 
 
