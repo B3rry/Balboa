@@ -1,22 +1,24 @@
 import os
 import sys 
-from update_flair_text import UpdateFlairText
-from update_flair_text_by_user import UpdateFlairTextByUser
-from update_flair_with_rules import UpdateFlairWithRules
-from update_flair_with_rules_by_user import UpdateFlairWithRulesByUser
-from bulk_update_from_csv import BulkUpdateFromCSV
-from rule_parse import Rules
+
+
+from actions.reddit.flair.update_flair_text import UpdateFlairText
+from actions.reddit.flair.update_flair_text_by_user import UpdateFlairTextByUser
+from actions.reddit.flair.update_flair_with_rules import UpdateFlairWithRules
+from actions.reddit.flair.update_flair_with_rules_by_user import UpdateFlairWithRulesByUser
+from actions.reddit.flair.bulk_update_from_csv import BulkUpdateFromCSV
+from actions.reddit.flair.rule_parse import Rules
 
 class ActionDispatch:
 
     def __init__(self, requestIdentifier, payload, reddit):
         # Maps action requests to executions
         functionDispatch = {
-            # 'UPDATE_FLAIR_TEXT': lambda: UpdateFlairText(payload, reddit).complete,
+            'UPDATE_FLAIR_TEXT': lambda: UpdateFlairText(payload, reddit).complete,
             # 'UPDATE_FLAIR_TEXT_BY_USER': UpdateFlairTextByUser(payload, reddit).complete,
             'UPDATE_FLAIR_WITH_RULES': lambda: UpdateFlairWithRules(payload, reddit).complete,
             # 'UPDATE_FLAIR_WITH_RULES_BY_USER': UpdateFlairWithRulesByUser(payload, reddit).complete,
-            # 'UPDATE_RULES': Rules(reddit).updateRules,
+            'UPDATE_RULES': Rules(reddit).updateRules,
             # 'UPDATE_CONFIG': Rules(reddit).updateRules,
             # 'REBOOT': Rules(reddit).updateRules,
             # 'SHUTDOWN': Rules(reddit).updateRules,

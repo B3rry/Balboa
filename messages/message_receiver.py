@@ -2,7 +2,7 @@
 import os
 import json
 import sys
-from action_request import ActionRequest
+from actions.action_request import ActionRequest
 
 class MessageReceiver:
     def __init__(self, reddit):

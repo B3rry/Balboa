@@ -3,19 +3,18 @@ import sys
 import time
 import datetime
 import praw
-import flair_bot
-from rule_parse import Rules
-from message_receiver import MessageReceiver
+from actions.reddit.flair.rule_parse import Rules
+from messages.message_receiver import MessageReceiver
 
 class Bot:
 
-    subject = None
     logging = None
     conf = None
     reddit = None
     flairs = {}
 
     def __init__(self):
+        # Initializtion.
         if os.environ.get("LOGGING"):
             os.chdir(os.path.dirname(os.path.abspath(__file__)))
         else:
@@ -44,13 +43,12 @@ class Bot:
 
     def run(self):
         print ''
-        print 'Bot: /u/' + os.environ.get("USERNAME") + 'has started. Initialized at: ' + str(datetime.datetime.now())
+        print 'Bot: /u/' + os.environ.get("USERNAME") + ' has started. Initialized at: ' + str(datetime.datetime.now())
         sys.stdout.flush()
-        # self.reddit.redditor('/r/' + os.environ.get("SUBREDDIT") ).message('Bot: /u/' + os.environ.get("USERNAME") + 'has started', 'Initialized at: ' + str(datetime.datetime.now()))
-        # GET RULES
+        # Get the initial set of rules. This should probaby be split out into a separate initilization lifecycle script.
         currentRules = Rules(self.reddit).currentRules
         
-        # RUN LISTENER
+        # Starts running the bot...
         running = True
         while running:
             try:
