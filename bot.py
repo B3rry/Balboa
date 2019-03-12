@@ -4,7 +4,7 @@ import time
 import datetime
 import praw
 from actions.reddit.flair.rule_parse import Rules
-from message_receiver import MessageReceiver
+from messages.message_receiver import MessageReceiver
 
 class Bot:
 
