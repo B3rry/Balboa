@@ -21,8 +21,8 @@ class Rules:
         try:
             path = os.environ.get("USERNAME") + '/rules'
 
-            print "* Updating rulesets"
-            print "  * Looking for ruleset at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path + "..."
+            print("* Updating rulesets")
+            print("  * Looking for ruleset at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path + "...")
             sys.stdout.flush()
             
             ruledef = self.reddit.subreddit(os.environ.get("SUBREDDIT")).wiki[path].content_md
@@ -38,7 +38,7 @@ class Rules:
 
     def parse_rules(self, ruledef):
         try:
-            print "  * Loading ruleset..."
+            print("  * Loading ruleset...")
             sys.stdout.flush()
 
             ruledef = json.loads(ruledef)
@@ -53,7 +53,7 @@ class Rules:
 
     def store_rules(self, ruledef):
         try:
-            print "  * Storing ruleset..."
+            print("  * Storing ruleset...")
             sys.stdout.flush()
 
             json.dump(ruledef, open("rules.json", 'w'))
@@ -67,7 +67,7 @@ class Rules:
             self.process_rules()
 
     def process_rules(self):
-        print "  * Applying ruleset..."
+        print("  * Applying ruleset...")
         sys.stdout.flush()
 
         with open('rules.json') as botconfig:
@@ -90,7 +90,7 @@ class Rules:
                     'message': 'The following ruleset could not be loaded: ' + str(e)
                 }
             else:
-                print "* Rulesets " + ', '.join(loaded) + " now active"
+                print("* Rulesets " + ', '.join(loaded) + " now active")
                 sys.stdout.flush()
                 self.status = {
                     'statusCode': 400,

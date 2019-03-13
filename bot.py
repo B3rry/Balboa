@@ -20,8 +20,8 @@ class Bot:
         else:
             self.logging = False
 
-        print ''
-        print 'Bot: Starting /u/' + os.environ.get("USERNAME") + ' for subreddit /r/' + os.environ.get("SUBREDDIT")
+        print('')
+        print('Bot: Starting /u/' + os.environ.get("USERNAME") + ' for subreddit /r/' + os.environ.get("SUBREDDIT"))
         sys.stdout.flush()
 
         self.login()
@@ -42,23 +42,23 @@ class Bot:
         self.run()
 
     def run(self):
-        print 'Bot: Started /u/' + os.environ.get("USERNAME") + ' at ' + str(datetime.datetime.now())
-        print ''
+        print('Bot: Started /u/' + os.environ.get("USERNAME") + ' at ' + str(datetime.datetime.now()))
+        print('')
         sys.stdout.flush()
         # Get the initial set of rules. This should probaby be split out into a separate initilization lifecycle script.
 
-        print 'Bot: Initializing /u/' + os.environ.get("USERNAME") + ' for subreddit /r/' + os.environ.get("SUBREDDIT")
+        print('Bot: Initializing /u/' + os.environ.get("USERNAME") + ' for subreddit /r/' + os.environ.get("SUBREDDIT"))
         sys.stdout.flush()
         currentRules = Rules(self.reddit).currentRules
 
-        print 'Bot: /u/' + os.environ.get("USERNAME") + ' successfully initialized at ' + str(datetime.datetime.now())
+        print('Bot: /u/' + os.environ.get("USERNAME") + ' successfully initialized at ' + str(datetime.datetime.now()))
         sys.stdout.flush()
         
         # Starts running the bot...
         running = True
 
-        print ''
-        print 'Bot: /u/' + os.environ.get("USERNAME") + " running from " + str(datetime.datetime.now())
+        print('')
+        print('Bot: /u/' + os.environ.get("USERNAME") + " running from " + str(datetime.datetime.now()))
         sys.stdout.flush()
         while running:
             try:
