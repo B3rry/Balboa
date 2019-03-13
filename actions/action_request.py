@@ -31,6 +31,7 @@ class ActionRequest:
             # 'User Logs': 'LOGS_BY_USER',
             # 'Execute': 'EXECUTE',
             # 'Unknown Command': 'ERR_UNKOWN_COMMAND'
+            'Moderator Check': 'MODERATOR_RELATIONSHIP'
         }
 
         # `knownExceptions` (list, string): defines a list of message subjects that will cause the bot to mark the message as read and take no action.

@@ -20,13 +20,14 @@ class Rules:
     def get_rules(self):
         try:
             path = os.environ.get("USERNAME") + '/rules'
-
             print("* Updating rulesets")
-            print("  * Looking for ruleset at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path + "...")
+            print("  * Looking for ruleset at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path)
             sys.stdout.flush()
-            
             ruledef = self.reddit.subreddit(os.environ.get("SUBREDDIT")).wiki[path].content_md
         except Exception as e:
+            print("  * No ruleset found at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path + "")
+            print("* Updating rulesets failed. Continuing with no active rulesets.")
+            sys.stdout.flush()
             self.status = {
                 'statusCode': 400,
                 'subject': 'Error: Flair Rules Not Found',
@@ -35,14 +36,15 @@ class Rules:
         else:
             self.parse_rules(ruledef)
 
-
     def parse_rules(self, ruledef):
         try:
             print("  * Loading ruleset...")
             sys.stdout.flush()
-
             ruledef = json.loads(ruledef)
         except Exception as e:
+            print("  * Ruleset contains invalid JSON: " + str(e))
+            print("* Updating rulesets failed. Continuing with no active rulesets.")
+            sys.stdout.flush()
             self.status = {
                 'statusCode': 400,
                 'subject': 'Error: Flair Rules Not Loaded',
@@ -55,9 +57,11 @@ class Rules:
         try:
             print("  * Storing ruleset...")
             sys.stdout.flush()
-
             json.dump(ruledef, open("rules.json", 'w'))
         except Exception as e:
+            print("  * Ruleset could not be saved: " + str(e))
+            print("* Updating rulesets failed. Continuing with no active rulesets.")
+            sys.stdout.flush()
             self.status = {
                 'statusCode': 400,
                 'subject': 'Error: Flair Rules Not Saved',
@@ -69,7 +73,6 @@ class Rules:
     def process_rules(self):
         print("  * Applying ruleset...")
         sys.stdout.flush()
-
         with open('rules.json') as botconfig:
             self.theseRules = json.load(botconfig)['rules']
             loaded = []
@@ -82,15 +85,17 @@ class Rules:
 
                     for option in ruletext:
                         self.rulesDirectory[option] = index
-
             except Exception as e:
+                print("  * Ruleset could not be applied: " + str(e))
+                print("* Updating rulesets failed. Continuing with no active rulesets.")
+                sys.stdout.flush()
                 self.status = {
                     'statusCode': 400,
                     'subject': 'Error: Flair Rules Not Loaded',
                     'message': 'The following ruleset could not be loaded: ' + str(e)
                 }
             else:
-                print("* Rulesets " + ', '.join(loaded) + " now active")
+                print("* Updating rulesets completed. Rulesets " + ', '.join(loaded) + " now active")
                 sys.stdout.flush()
                 self.status = {
                     'statusCode': 400,

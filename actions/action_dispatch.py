@@ -1,13 +1,14 @@
 import os
 import sys 
 
-from actions.reddit.ping import Ping
+from actions.system.ping import Ping
 from actions.reddit.flair.update_flair_text import UpdateFlairText
 from actions.reddit.flair.update_flair_text_by_user import UpdateFlairTextByUser
 from actions.reddit.flair.update_flair_with_rules import UpdateFlairWithRules
 from actions.reddit.flair.update_flair_with_rules_by_user import UpdateFlairWithRulesByUser
 from actions.reddit.flair.bulk_update_from_csv import BulkUpdateFromCSV
 from actions.reddit.flair.rule_parse import Rules
+from actions.reddit.redditor.moderator_relationship import ModeratorRelationship
 from messages.message_dispatcher import MessageDispatcher
 
 class ActionDispatch:
@@ -21,6 +22,7 @@ class ActionDispatch:
             'UPDATE_FLAIR_WITH_RULES': lambda: UpdateFlairWithRules(payload, reddit).complete,
             # 'UPDATE_FLAIR_WITH_RULES_BY_USER': UpdateFlairWithRulesByUser(payload, reddit).complete,
             'UPDATE_RULES': lambda: Rules(reddit).updateRules,
+            'MODERATOR_RELATIONSHIP': lambda: ModeratorRelationship(payload, reddit).complete
             # 'UPDATE_CONFIG': Rules(reddit).updateRules,
             # 'REBOOT': Rules(reddit).updateRules,
             # 'SHUTDOWN': Rules(reddit).updateRules,
