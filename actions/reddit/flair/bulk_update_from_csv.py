@@ -7,7 +7,7 @@ class BulkUpdateFromCSV:
 
     def __init__(self, reddit):
         self.status = {
-            'response': 0,
+            'statusCode': 0,
             'subject': 'Error: Flair not set',
             'message': 'An error has occured. Please contact your moderator.'
         }
@@ -27,7 +27,7 @@ class BulkUpdateFromCSV:
         subreddit.flair.update(flair_dicts)
 
 
-        self.status['response'] = 200
+        self.status['statusCode'] = 200
         self.status['subject'] = 'Flair Changed'
         self.status['message'] = 'Batch process complete.'
 

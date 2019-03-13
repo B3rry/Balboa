@@ -1,24 +1,26 @@
 import os
 import sys 
 
-
+from actions.reddit.ping import Ping
 from actions.reddit.flair.update_flair_text import UpdateFlairText
 from actions.reddit.flair.update_flair_text_by_user import UpdateFlairTextByUser
 from actions.reddit.flair.update_flair_with_rules import UpdateFlairWithRules
 from actions.reddit.flair.update_flair_with_rules_by_user import UpdateFlairWithRulesByUser
 from actions.reddit.flair.bulk_update_from_csv import BulkUpdateFromCSV
 from actions.reddit.flair.rule_parse import Rules
+from messages.message_dispatcher import MessageDispatcher
 
 class ActionDispatch:
 
     def __init__(self, requestIdentifier, payload, reddit):
         # Maps action requests to executions
         functionDispatch = {
+            'PING': lambda: Ping(payload).complete,
             'UPDATE_FLAIR_TEXT': lambda: UpdateFlairText(payload, reddit).complete,
             # 'UPDATE_FLAIR_TEXT_BY_USER': UpdateFlairTextByUser(payload, reddit).complete,
             'UPDATE_FLAIR_WITH_RULES': lambda: UpdateFlairWithRules(payload, reddit).complete,
             # 'UPDATE_FLAIR_WITH_RULES_BY_USER': UpdateFlairWithRulesByUser(payload, reddit).complete,
-            'UPDATE_RULES': Rules(reddit).updateRules,
+            'UPDATE_RULES': lambda: Rules(reddit).updateRules,
             # 'UPDATE_CONFIG': Rules(reddit).updateRules,
             # 'REBOOT': Rules(reddit).updateRules,
             # 'SHUTDOWN': Rules(reddit).updateRules,
@@ -28,16 +30,8 @@ class ActionDispatch:
             # 'EXECUTE': BulkUpdateFromCSV(reddit).complete,
         }
 
-        # Dispatches function, returns a response status code, response message subject, and response message body
-        dispatch = functionDispatch[requestIdentifier]()
+        # Dispatches function, returns a response object
+        response = functionDispatch[requestIdentifier]()
 
-        # Catch for error handling of function execution
-        if dispatch['response'] == 200:
-            reddit.redditor(str(payload.author)).message(dispatch['subject'], dispatch['message'])
-            payload.mark_read()
-        # if dispatch['response'] == 200:
-        #     reddit.redditor(str(payload.author)).message(dispatch['subject'], dispatch['message'])
-        #     payload.mark_read()
-        # else:
-        #     reddit.redditor(str(payload.author)).message(dispatch['subject'], dispatch['message'])
-        #     payload.mark_read()
+        MessageDispatcher(payload, response, reddit)
+

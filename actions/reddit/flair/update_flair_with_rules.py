@@ -14,7 +14,7 @@ class UpdateFlairWithRules:
         content = str(payload.body)
         # Set a default status to be overwritten
         self.status = {
-            'response': 0,
+            'statusCode': 0,
             'subject': 'Flair not set',
             'message': 'An error has occured. Please contact your moderator.',
             'notify': {
@@ -38,7 +38,7 @@ class UpdateFlairWithRules:
             ruleset = ruleset[content]
         except KeyError:
             ruleset = False
-            self.status['response'] = 200
+            self.status['statusCode'] = 200
             self.status['subject'] = 'Invalid Flair for /r/' + os.environ.get("SUBREDDIT")
             self.status['message'] = '/u/' +  author + ',\n\nThe flair you requested ("' + content + '") is not valid. Please try again.\n\nPlease go to the [list of available flairs](https://www.reddit.com/r/survivor/wiki/available_flairs) and follow the instructions provided.\n\nIf you continue to experience errors, please [message the /r/' + os.environ.get("SUBREDDIT") + '  moderators](https://www.reddit.com/message/compose/?to=/r/Survivor&subject=Help%20with%20flair) for help.'
         else:
@@ -71,11 +71,11 @@ class UpdateFlairWithRules:
             try:
                 subreddit.flair.set(author, content, new_class)
             except:
-                self.status['response'] = 200
+                self.status['statusCode'] = 200
                 self.status['subject'] = 'An Error Occurred'
                 self.status['message'] = author + ', your requested flair of "' + content + '" on /r/' + os.environ.get("SUBREDDIT") + ' is not valid. This bot is in beta. Is this an error? Please contact your moderator.'
             else:
-                self.status['response'] = 200
+                self.status['statusCode'] = 200
                 self.status['subject'] = '/r/' + os.environ.get("SUBREDDIT") + ' Flair Updated'
                 self.status['message'] = '/u/' +  author + ',\n\nYour flair has been updated to "' + content + '".\n\nIf your updated flair is incorrect, [message the /r/' + os.environ.get("SUBREDDIT") + '  moderators](https://www.reddit.com/message/compose/?to=/r/Survivor&subject=Help%20with%20flair) for help.'
 

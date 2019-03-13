@@ -17,6 +17,7 @@ class ActionRequest:
         # Currently, only supports 'Set Flair', you can enable other items, but do so at your own risk. No permissions gate any user from executing any of these. (Yet. High 
         # priority contribution option if you're looking for a place to start. )
         requestCommand = {
+            'Ping': 'PING',
             'Flair': 'UPDATE_FLAIR_TEXT',
             # 'User Flair': 'UPDATE_FLAIR_TEXT_BY_USER',
             'Set Flair': 'UPDATE_FLAIR_WITH_RULES',
