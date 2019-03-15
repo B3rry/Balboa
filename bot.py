@@ -4,6 +4,7 @@ import time
 import datetime
 import praw
 from actions.reddit.flair.rule_parse import Rules
+from actions.reddit.configuration.get_permissions import Permissions
 from messages.message_receiver import MessageReceiver
 
 class Bot:
@@ -26,7 +27,8 @@ class Bot:
 
         self.login()
     def login(self):
-        """ Log in via script/web app. """
+        print('* Authenticating /u/' + os.environ.get("USERNAME") + ' on reddit.com')
+        sys.stdout.flush()
 
         app_id = os.environ.get("APP_ID")
         app_secret = os.environ.get("APP_SECRET")
@@ -34,12 +36,25 @@ class Bot:
 
         username = os.environ.get("USERNAME")
         password = os.environ.get("USER_PASSWORD")
-        self.reddit = praw.Reddit(client_id=app_id,\
-                        client_secret=app_secret,\
-                        username=username,\
-                        password=password,\
-                        user_agent=user_agent)
-        self.run()
+
+        try:
+            print('  * Signing in...')
+            sys.stdout.flush()
+            self.reddit = praw.Reddit(client_id=app_id,\
+                            client_secret=app_secret,\
+                            username=username,\
+                            password=password,\
+                            user_agent=user_agent)
+        except Exception as e:
+            print('  * Failed to authenticate: ' + str(e))
+            sys.stdout.flush()
+        else:
+            print('* Authenticated /u/' + os.environ.get("USERNAME") + ' on reddit.com')
+            sys.stdout.flush()
+            self.run()
+
+        # print('* Authenticated /u/' + os.environ.get("USERNAME") + ' on reddit.com')
+        # self.run()
 
     def run(self):
         print('Bot: Started /u/' + os.environ.get("USERNAME") + ' at ' + str(datetime.datetime.now()))
@@ -49,6 +64,7 @@ class Bot:
 
         print('Bot: Initializing /u/' + os.environ.get("USERNAME") + ' for subreddit /r/' + os.environ.get("SUBREDDIT"))
         sys.stdout.flush()
+        currentPermissions = Permissions(self.reddit).currentPermissions
         currentRules = Rules(self.reddit).currentRules
 
         print('Bot: /u/' + os.environ.get("USERNAME") + ' successfully initialized at ' + str(datetime.datetime.now()))

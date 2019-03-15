@@ -9,27 +9,34 @@ from time import gmtime, strftime
 class ModeratorRelationship:
 
     def __init__(self, payload, reddit):
-        author = str(payload.author)
-        # content = str(payload.body)
-        # Set a default status to be overwritten
+        userToCheck = str(payload.author)
         self.status = {
             'statusCode': 200,
-            'subject': 'Flair not set',
-            'message': 'An error has occured. Please contact your moderator.',
-            'notify': {
-                'user': author,
-                'log': True,
-                'notifyUser': True,
-                'notifyModerators': False
-            }
+            'subject': 'Moderator Relationship',
+            'message': str(userToCheck)
         }
+
         target_sub = os.environ.get("SUBREDDIT")
         subreddit = reddit.subreddit(target_sub)
-        moderators = subreddit.moderator()
+        callModeratorList = subreddit.moderator.__call__(redditor=userToCheck)
+        self.is_moderator = userToCheck in callModeratorList
 
-        print(moderators)
-        sys.stdout.flush()
+        self.status = {
+            'statusCode': 200,
+            'subject': 'Moderator Relationship',
+            'message': '/u/' + str(userToCheck) + ' returned ' + str(self.is_moderator)
+        }
+        
+
+    @property
+    def isModerator(self):
+        # print('isModerator')
+        # print(self.isModerator)
+        # sys.stdout.flush()
+        return self.is_moderator
 
     @property
     def complete(self):
+        # print('completed')
+        # sys.stdout.flush()
         return self.status

@@ -21,7 +21,7 @@ class Rules:
         try:
             path = os.environ.get("USERNAME") + '/rules'
             print("* Updating rulesets")
-            print("  * Looking for ruleset at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path)
+            print("  * Looking for ruleset at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path + '...')
             sys.stdout.flush()
             ruledef = self.reddit.subreddit(os.environ.get("SUBREDDIT")).wiki[path].content_md
         except Exception as e:
