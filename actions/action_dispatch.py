@@ -24,16 +24,9 @@ class ActionDispatch:
         functionDispatch = {
             'PINGPONG': lambda: Ping(payload).complete,
             'UPDATE_FLAIR_TEXT': lambda: UpdateFlairText(payload, reddit).complete,
-            # 'UPDATE_FLAIR_TEXT_BY_USER': UpdateFlairTextByUser(payload, reddit).complete,
             'UPDATE_FLAIR_WITH_RULES': lambda: UpdateFlairWithRules(payload, reddit).complete,
-            # 'UPDATE_FLAIR_WITH_RULES_BY_USER': UpdateFlairWithRulesByUser(payload, reddit).complete,
             'UPDATE_RULES': lambda: Rules(reddit).updateRules,
             'BULK_UPDATE_FLAIRS': lambda: BulkUpdateFromCSV(payload, reddit).complete,
-            # 'REBOOT': Rules(reddit).updateRules,
-            # 'SHUTDOWN': Rules(reddit).updateRules,
-            # 'STATUS': Rules(reddit).updateRules,
-            # 'LOGS': Rules(reddit).updateRules,
-            # 'LOGS_BY_USER': Rules(reddit).updateRules,
         }
 
         activePermissions = Permissions(reddit).currentPermissions

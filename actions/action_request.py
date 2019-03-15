@@ -17,17 +17,9 @@ class ActionRequest:
         requestCommand = {
             'Ping': 'PINGPONG',
             'Flair': 'UPDATE_FLAIR_TEXT',
-            # 'User Flair': 'UPDATE_FLAIR_TEXT_BY_USER',
             'Set Flair': 'UPDATE_FLAIR_WITH_RULES',
-            # 'Set User Flair': 'UPDATE_FLAIR_WITH_RULES_BY_USER',
             'Update Rules': 'UPDATE_RULES',
             'Bulk Update Flair': 'BULK_UPDATE_FLAIRS'
-            # 'Update Config': 'UPDATE_CONFIG',
-            # 'Reboot': 'REBOOT',
-            # 'Shutdown': 'SHUTDOWN',
-            # 'Status': 'STATUS',
-            # 'Logs': 'LOGS',
-            # 'User Logs': 'LOGS_BY_USER',
         }
 
         # `knownExceptions` (list, string): defines a list of message subjects that will cause the bot to mark the message as read and take no action.
