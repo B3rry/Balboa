@@ -1,16 +1,19 @@
 import os
 import sys
 import csv
+import urllib
 import praw
 
 class BulkUpdateFromCSV:
 
-    def __init__(self, reddit):
+    def __init__(self, payload, reddit):
         self.status = {
-            'response': 0,
+            'statusCode': 0,
             'subject': 'Error: Flair not set',
             'message': 'An error has occured. Please contact your moderator.'
         }
+
+        remoteURL = str(payload.body)
 
         target_sub = os.environ.get("SUBREDDIT")
         subreddit = reddit.subreddit(target_sub)
@@ -18,16 +21,29 @@ class BulkUpdateFromCSV:
         flair_dicts = []
 
         keys = ['user', 'flair_text', 'flair_css_class']
+        print('starting bulk update')
+        sys.stdout.flush()
+        remoteFile = urllib.urlretrieve(remoteURL)
+        # fileData = remoteFile.read()
 
-        with open('bulk_update_flairs.csv') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                flair_dicts.append(dict(zip(keys, row)))
+        print(remoteFile[0])
+        sys.stdout.flush()
 
+        try:
+            with open(remoteFile[0]) as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    flair_dicts.append(dict(zip(keys, row)))
+        except Exception as e:
+            print(e)
+            sys.stdout.flush()
+
+        print(flair_dicts)
+        sys.stdout.flush()
         subreddit.flair.update(flair_dicts)
 
 
-        self.status['response'] = 200
+        self.status['statusCode'] = 200
         self.status['subject'] = 'Flair Changed'
         self.status['message'] = 'Batch process complete.'
 
