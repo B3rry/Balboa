@@ -34,7 +34,7 @@ class ActionDispatch:
         requestPermissions = activePermissions['actions'][requestIdentifier]
 
         # Check to see if a user is in the list of users banned from using the bot, or is banned from the subreddit
-        if (str(payload.author).lower() in botPermissions['restrictedUsers'] or BannedRelationship(payload, reddit).isBanned):
+        if (str(payload.author)in botPermissions['restrictedUsers'] or BannedRelationship(payload, reddit).isBanned):
             print('* User is not authorized to use bot')
             sys.stdout.flush()
             response = {
@@ -48,6 +48,8 @@ class ActionDispatch:
             if ('redditor' in requestPermissions['authorizedRelationships']):
                 response = functionDispatch[requestIdentifier]()
             elif ('moderator' in requestPermissions['authorizedRelationships'] and ModeratorRelationship(payload, reddit).isModerator):
+                response = functionDispatch[requestIdentifier]()
+            elif (str(payload.author) in requestPermissions['authorizedUsers'] ):
                 response = functionDispatch[requestIdentifier]()
             else:
                 response = {
