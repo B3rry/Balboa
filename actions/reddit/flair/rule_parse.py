@@ -19,19 +19,19 @@ class Rules:
 
     def get_rules(self):
         try:
-            path = os.environ.get("USERNAME") + '/rules'
+            path = os.getenv("USERNAME") + '/rules'
             print("* Updating rulesets")
-            print("  * Looking for ruleset at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path + '...')
+            print("  * Looking for ruleset at reddit.com/r/" + os.getenv("SUBREDDIT") + '/wiki/' + path + '...')
             sys.stdout.flush()
-            ruledef = self.reddit.subreddit(os.environ.get("SUBREDDIT")).wiki[path].content_md
+            ruledef = self.reddit.subreddit(os.getenv("SUBREDDIT")).wiki[path].content_md
         except Exception as e:
-            print("  * No ruleset found at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path + "")
+            print("  * No ruleset found at reddit.com/r/" + os.getenv("SUBREDDIT") + '/wiki/' + path + "")
             print("* Updating rulesets failed. Continuing with no active rulesets.")
             sys.stdout.flush()
             self.status = {
                 'statusCode': 400,
                 'subject': 'Error: Flair Rules Not Found',
-                'message': "Ruleset cannot be found. Confirm your ruleset is located at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path + " :"  + str(e)
+                'message': "Ruleset cannot be found. Confirm your ruleset is located at reddit.com/r/" + os.getenv("SUBREDDIT") + '/wiki/' + path + " :"  + str(e)
             }
         else:
             self.parse_rules(ruledef)

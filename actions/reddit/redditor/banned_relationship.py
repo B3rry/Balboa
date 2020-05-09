@@ -16,7 +16,7 @@ class BannedRelationship:
             'message': str(userToCheck)
         }
 
-        target_sub = os.environ.get("SUBREDDIT")
+        target_sub = os.getenv("SUBREDDIT")
         subreddit = reddit.subreddit(target_sub)
         callBannedList = subreddit.banned.__call__(redditor=userToCheck)
         self.is_banned = userToCheck in callBannedList

@@ -19,19 +19,19 @@ class Permissions:
 
     def get_permissions(self):
         try:
-            documentPath = os.environ.get("USERNAME") + '/config/permissions'
+            documentPath = os.getenv("USERNAME") + '/config/permissions'
             print("* Updating permissions")
-            print("  * Looking for permissions at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + documentPath + '...')
+            print("  * Looking for permissions at reddit.com/r/" + os.getenv("SUBREDDIT") + '/wiki/' + documentPath + '...')
             sys.stdout.flush()
-            permissionsDefinition = self.reddit.subreddit(os.environ.get("SUBREDDIT")).wiki[documentPath].content_md
+            permissionsDefinition = self.reddit.subreddit(os.getenv("SUBREDDIT")).wiki[documentPath].content_md
         except Exception as e:
-            print("  * No permissions found at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + documentPath + "")
+            print("  * No permissions found at reddit.com/r/" + os.getenv("SUBREDDIT") + '/wiki/' + documentPath + "")
             print("* Updating permissionss failed. Continuing with no active permissionss.")
             sys.stdout.flush()
             self.status = {
                 'statusCode': 400,
                 'subject': 'Error: Permissions Not Found',
-                'message': "Permissions definition cannot be found. Confirm your permissions definition is located at reddit.com/r/" + os.environ.get("SUBREDDIT") + '/wiki/' + path + " :"  + str(e)
+                'message': "Permissions definition cannot be found. Confirm your permissions definition is located at reddit.com/r/" + os.getenv("SUBREDDIT") + '/wiki' + documentPath + " :"  + str(e)
             }
         else:
             self.parse_permissions(permissionsDefinition)

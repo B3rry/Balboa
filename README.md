@@ -7,7 +7,7 @@ Balboa was initially created for [/r/survivor](https://www.reddit.com/r/survivor
 ## Getting Started
 
 ### Prerequisites
-* [Python 2.7.x](https://docs.python.org/2/ "documentation")
+* [Python 3.7.x](https://docs.python.org/3/ "documentation")
 * [pip](https://pip.pypa.io/en/stable/installing/ "installation instructions")
 
 

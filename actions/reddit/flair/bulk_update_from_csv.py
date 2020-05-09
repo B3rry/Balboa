@@ -1,7 +1,7 @@
 import os
 import sys
 import csv
-import urllib
+import urllib.request
 import praw
 
 class BulkUpdateFromCSV:
@@ -15,7 +15,7 @@ class BulkUpdateFromCSV:
 
         remoteURL = str(payload.body)
 
-        target_sub = os.environ.get("SUBREDDIT")
+        target_sub = os.getenv("SUBREDDIT")
         subreddit = reddit.subreddit(target_sub)
 
         flair_dicts = []
@@ -23,7 +23,7 @@ class BulkUpdateFromCSV:
         keys = ['user', 'flair_text', 'flair_css_class']
         print('starting bulk update')
         sys.stdout.flush()
-        remoteFile = urllib.urlretrieve(remoteURL)
+        remoteFile = urllib.request.urlretrieve(remoteURL)
         # fileData = remoteFile.read()
 
         print(remoteFile[0])

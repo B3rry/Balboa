@@ -16,7 +16,7 @@ class ModeratorRelationship:
             'message': str(userToCheck)
         }
 
-        target_sub = os.environ.get("SUBREDDIT")
+        target_sub = os.getenv("SUBREDDIT")
         subreddit = reddit.subreddit(target_sub)
         callModeratorList = subreddit.moderator.__call__(redditor=userToCheck)
         self.is_moderator = userToCheck in callModeratorList
