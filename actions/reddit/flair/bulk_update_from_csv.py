@@ -15,7 +15,7 @@ class BulkUpdateFromCSV:
 
         remoteURL = str(payload.body)
 
-        target_sub = os.environ.get("SUBREDDIT")
+        target_sub = os.getenv("SUBREDDIT")
         subreddit = reddit.subreddit(target_sub)
 
         flair_dicts = []
