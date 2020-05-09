@@ -5,7 +5,7 @@ import praw
 import re
 import calendar
 from time import gmtime, strftime
-from rule_parse import Rules
+from .rule_parse import Rules
 
 class UpdateFlairWithRulesByUser:
 
@@ -19,7 +19,7 @@ class UpdateFlairWithRulesByUser:
         content = str(payload.body)
         current_class = None
         new_class = ''
-        target_sub = os.environ.get("SUBREDDIT")
+        target_sub = os.getenv("SUBREDDIT")
         subreddit = reddit.subreddit(target_sub)
 
         for user in subreddit.flair.__call__(redditor=author):
@@ -55,7 +55,7 @@ class UpdateFlairWithRulesByUser:
 
         self.status['statusCode'] = 200
         self.status['subject'] = 'Flair Changed'
-        self.status['message'] = author + ', your flair on /r/' + os.environ.get("SUBREDDIT") + ' has been updated to: ' + content + '. This bot is in beta. Not seeing your flair update? Please contact your moderator.'
+        self.status['message'] = author + ', your flair on /r/' + os.getenv("SUBREDDIT") + ' has been updated to: ' + content + '. This bot is in beta. Not seeing your flair update? Please contact your moderator.'
 
 
     @property

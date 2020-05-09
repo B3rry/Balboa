@@ -29,6 +29,7 @@ class ActionDispatch:
             'BULK_UPDATE_FLAIRS': lambda: BulkUpdateFromCSV(payload, reddit).complete,
         }
 
+        # TODO: Catch errors parsing permissions, as this results in a loop otherwise. "config/permissions on the wiki having `PING` instead of `PINGPONG` caused loop."
         activePermissions = Permissions(reddit).currentPermissions
         botPermissions = activePermissions['bot']
         requestPermissions = activePermissions['actions'][requestIdentifier]

@@ -16,26 +16,26 @@ class Bot:
 
     def __init__(self):
         # Initializtion.
-        if os.environ.get("LOGGING"):
+        if os.getenv("LOGGING"):
             os.chdir(os.path.dirname(os.path.abspath(__file__)))
         else:
             self.logging = False
 
         print('')
-        print('Bot: Starting /u/' + os.environ.get("USERNAME") + ' for subreddit /r/' + os.environ.get("SUBREDDIT"))
+        print('Bot: Starting /u/' + os.getenv("USERNAME") + ' for subreddit /r/' + os.getenv("SUBREDDIT"))
         sys.stdout.flush()
 
         self.login()
     def login(self):
-        print('* Authenticating /u/' + os.environ.get("USERNAME") + ' on reddit.com')
+        print('* Authenticating /u/' + os.getenv("USERNAME") + ' on reddit.com')
         sys.stdout.flush()
 
-        app_id = os.environ.get("APP_ID")
-        app_secret = os.environ.get("APP_SECRET")
-        user_agent = "Flair Updater for /r/" + os.environ.get("SUBREDDIT")
+        app_id = os.getenv("APP_ID")
+        app_secret = os.getenv("APP_SECRET")
+        user_agent = "Flair Updater for /r/" + os.getenv("SUBREDDIT")
 
-        username = os.environ.get("USERNAME")
-        password = os.environ.get("USER_PASSWORD")
+        username = os.getenv("USERNAME")
+        password = os.getenv("USER_PASSWORD")
 
         try:
             print('  * Signing in...')
@@ -49,37 +49,37 @@ class Bot:
             print('  * Failed to authenticate: ' + str(e))
             sys.stdout.flush()
         else:
-            print('* Authenticated /u/' + os.environ.get("USERNAME") + ' on reddit.com')
+            print('* Authenticated /u/' + os.getenv("USERNAME") + ' on reddit.com')
             sys.stdout.flush()
             self.run()
 
-        # print('* Authenticated /u/' + os.environ.get("USERNAME") + ' on reddit.com')
+        # print('* Authenticated /u/' + os.getenv("USERNAME") + ' on reddit.com')
         # self.run()
 
     def run(self):
-        print('Bot: Started /u/' + os.environ.get("USERNAME") + ' at ' + str(datetime.datetime.now()))
+        print('Bot: Started /u/' + os.getenv("USERNAME") + ' at ' + str(datetime.datetime.now()))
         print('')
         sys.stdout.flush()
         # Get the initial set of rules. This should probaby be split out into a separate initilization lifecycle script.
 
-        print('Bot: Initializing /u/' + os.environ.get("USERNAME") + ' for subreddit /r/' + os.environ.get("SUBREDDIT"))
+        print('Bot: Initializing /u/' + os.getenv("USERNAME") + ' for subreddit /r/' + os.getenv("SUBREDDIT"))
         sys.stdout.flush()
         currentPermissions = Permissions(self.reddit).currentPermissions
         currentRules = Rules(self.reddit).currentRules
 
-        print('Bot: /u/' + os.environ.get("USERNAME") + ' successfully initialized at ' + str(datetime.datetime.now()))
+        print('Bot: /u/' + os.getenv("USERNAME") + ' successfully initialized at ' + str(datetime.datetime.now()))
         sys.stdout.flush()
         
         # Starts running the bot...
         running = True
 
         print('')
-        print('Bot: /u/' + os.environ.get("USERNAME") + " running from " + str(datetime.datetime.now()))
+        print('Bot: /u/' + os.getenv("USERNAME") + " running from " + str(datetime.datetime.now()))
         sys.stdout.flush()
         while running:
             try:
                 MessageReceiver(self.reddit)
-                time.sleep(int(os.environ.get("REFRESH_INTERVAL")))
+                time.sleep(int(os.getenv("REFRESH_INTERVAL")))
             except Exception as e:
-                time.sleep(int(os.environ.get("REFRESH_INTERVAL")))
+                time.sleep(int(os.getenv("REFRESH_INTERVAL")))
         return 0
