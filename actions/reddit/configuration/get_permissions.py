@@ -31,7 +31,7 @@ class Permissions:
             self.status = {
                 'statusCode': 400,
                 'subject': 'Error: Permissions Not Found',
-                'message': "Permissions definition cannot be found. Confirm your permissions definition is located at reddit.com/r/" + os.getenv("SUBREDDIT") + '/wiki/' + path + " :"  + str(e)
+                'message': "Permissions definition cannot be found. Confirm your permissions definition is located at reddit.com/r/" + os.getenv("SUBREDDIT") + '/wiki' + documentPath + " :"  + str(e)
             }
         else:
             self.parse_permissions(permissionsDefinition)

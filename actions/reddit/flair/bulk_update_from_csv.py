@@ -1,7 +1,7 @@
 import os
 import sys
 import csv
-import urllib
+import urllib.request
 import praw
 
 class BulkUpdateFromCSV:
@@ -23,7 +23,7 @@ class BulkUpdateFromCSV:
         keys = ['user', 'flair_text', 'flair_css_class']
         print('starting bulk update')
         sys.stdout.flush()
-        remoteFile = urllib.urlretrieve(remoteURL)
+        remoteFile = urllib.request.urlretrieve(remoteURL)
         # fileData = remoteFile.read()
 
         print(remoteFile[0])
