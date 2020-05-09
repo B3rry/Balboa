@@ -14,7 +14,7 @@ class UpdateFlairTextByUser:
         author = str(payload.author)
         content = str(payload.body)
         current_class = None
-        target_sub = os.environ.get("SUBREDDIT")
+        target_sub = os.getenv("SUBREDDIT")
         subreddit = reddit.subreddit(target_sub)
 
         for user in subreddit.flair.__call__(redditor=author):
@@ -24,7 +24,7 @@ class UpdateFlairTextByUser:
 
         self.status['statusCode'] = 200
         self.status['subject'] = 'Flair Changed'
-        self.status['message'] = author + ', your flair on /r/' + os.environ.get("SUBREDDIT") + ' has been updated to: ' + content + '. This bot is in beta. Not seeing your flair update? Please contact your moderator.'
+        self.status['message'] = author + ', your flair on /r/' + os.getenv("SUBREDDIT") + ' has been updated to: ' + content + '. This bot is in beta. Not seeing your flair update? Please contact your moderator.'
 
 
     @property

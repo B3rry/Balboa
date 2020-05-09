@@ -18,7 +18,7 @@ class MessageDispatcher:
         elif response['statusCode'] == 204:
             payload.mark_read()
         elif response['statusCode'] == 400:
-            reddit.redditor('/r/' + os.environ.get("SUBREDDIT")).message(response['subject'], response['message'])
+            reddit.redditor('/r/' + os.getenv("SUBREDDIT")).message(response['subject'], response['message'])
             payload.mark_read()
         else: 
             payload.mark_read()
