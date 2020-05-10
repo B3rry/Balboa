@@ -55,11 +55,7 @@ class ActionRequest:
         if requestIdentifier is not None:
             print(str(decodedRequest) + " matches action " + str(requestIdentifier) + ". Dispatching Action...")
             sys.stdout.flush()
-            if protocol == "reddit":
-                ActionDispatch(requestIdentifier, payload, self.reddit)
-            elif protocol == "slack":
-                print("so slack things")
-                sys.stdout.flush()
+            ActionDispatch(protocol, requestIdentifier, payload, self.reddit)
         elif decodedRequest in knownExceptions:
             print(str(decodedRequest) + " is on the list of known exceptions. Taking no action, marking message as read. ")
             sys.stdout.flush()

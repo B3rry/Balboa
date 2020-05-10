@@ -10,6 +10,7 @@ from actions.reddit.flair.bulk_update_from_csv import BulkUpdateFromCSV
 from actions.reddit.flair.rule_parse import Rules
 from actions.reddit.redditor.moderator_relationship import ModeratorRelationship
 from actions.reddit.redditor.banned_relationship import BannedRelationship
+from actions.slack.say_hello import SayHello
 from messages.message_dispatcher import MessageDispatcher
 
 from actions.reddit.configuration.get_permissions import Permissions
@@ -18,7 +19,7 @@ class ActionDispatch:
     # ActionDispatch is triggered when action_request.py determines a request for action is valid.  This is where the bot will determine what to do when a user passes in a valid
     # command. Dispatch will determine if a user is authorized to tigger a command, and return a `status` object back to the MessageDispatcher.
 
-    def __init__(self, requestIdentifier, payload, reddit):
+    def __init__(self, protocol, requestIdentifier, payload, reddit):
         # `functionDispatch` (dict, string: `lambda:` function): defines a list of functions that can be preformed when the bot requests for an action to be preformed, as defined 
         # in action_request.py 
         functionDispatch = {
@@ -27,37 +28,41 @@ class ActionDispatch:
             'UPDATE_FLAIR_WITH_RULES': lambda: UpdateFlairWithRules(payload, reddit).complete,
             'UPDATE_RULES': lambda: Rules(reddit).updateRules,
             'BULK_UPDATE_FLAIRS': lambda: BulkUpdateFromCSV(payload, reddit).complete,
+            'SAYHELLO': lambda: SayHello(payload).complete,
         }
 
-        # TODO: Catch errors parsing permissions, as this results in a loop otherwise. "config/permissions on the wiki having `PING` instead of `PINGPONG` caused loop."
-        activePermissions = Permissions(reddit).currentPermissions
-        botPermissions = activePermissions['bot']
-        requestPermissions = activePermissions['actions'][requestIdentifier]
+        if protocol == 'reddit':
+            # TODO: Catch errors parsing permissions, as this results in a loop otherwise. "config/permissions on the wiki having `PING` instead of `PINGPONG` caused loop."
+            activePermissions = Permissions(reddit).currentPermissions
+            botPermissions = activePermissions['bot']
+            requestPermissions = activePermissions['actions'][requestIdentifier]
 
-        # Check to see if a user is in the list of users banned from using the bot, or is banned from the subreddit
-        if (str(payload.author)in botPermissions['restrictedUsers'] or BannedRelationship(payload, reddit).isBanned):
-            print('* User is not authorized to use bot')
-            sys.stdout.flush()
-            response = {
-            'statusCode': 200,
-            'subject': 'Error: Not Authorized',
-            'message': 'You are banned from using this bot.'
-            }
-        else:
-            print('* User is authorized to use bot')
-            sys.stdout.flush()
-            if ('redditor' in requestPermissions['authorizedRelationships']):
-                response = functionDispatch[requestIdentifier]()
-            elif ('moderator' in requestPermissions['authorizedRelationships'] and ModeratorRelationship(payload, reddit).isModerator):
-                response = functionDispatch[requestIdentifier]()
-            elif (str(payload.author) in requestPermissions['authorizedUsers'] ):
-                response = functionDispatch[requestIdentifier]()
-            else:
+            # Check to see if a user is in the list of users banned from using the bot, or is banned from the subreddit
+            if (str(payload.author)in botPermissions['restrictedUsers'] or BannedRelationship(payload, reddit).isBanned):
+                print('* User is not authorized to use bot')
+                sys.stdout.flush()
                 response = {
                 'statusCode': 200,
                 'subject': 'Error: Not Authorized',
-                'message': 'You are not authorized to preform this action'
+                'message': 'You are banned from using this bot.'
                 }
-
-        MessageDispatcher(payload, response, reddit)
+            else:
+                print('* User is authorized to use bot')
+                sys.stdout.flush()
+                if ('redditor' in requestPermissions['authorizedRelationships']):
+                    response = functionDispatch[requestIdentifier]()
+                elif ('moderator' in requestPermissions['authorizedRelationships'] and ModeratorRelationship(payload, reddit).isModerator):
+                    response = functionDispatch[requestIdentifier]()
+                elif (str(payload.author) in requestPermissions['authorizedUsers'] ):
+                    response = functionDispatch[requestIdentifier]()
+                else:
+                    response = {
+                    'statusCode': 200,
+                    'subject': 'Error: Not Authorized',
+                    'message': 'You are not authorized to preform this action'
+                    }
+            MessageDispatcher(protocol, response, payload, reddit)
+        if protocol == 'slack':
+            response = functionDispatch[requestIdentifier]()
+            MessageDispatcher(protocol, response, payload, reddit=None)
 

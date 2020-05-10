@@ -2,6 +2,9 @@
 import os
 import json
 import sys
+from messages.dispatchers.reddit_message_dispatcher import RedditMessageDispatcher
+from messages.dispatchers.slack_message_dispatcher import SlackMessageDispatcher
+
 
 # ============= Message Dispatcher .py ============= #
 # Currently, Message Dispatcher handles the sending of responses to messages sent
@@ -23,21 +26,16 @@ import sys
 # [TODO]: Dynamic composure of messages, (headers, footers for different types, etc)
 
 class MessageDispatcher:
-    def __init__(self, payload, response, reddit):
+    def __init__(self, protocol, response, payload, reddit):
+        self.protocol = protocol
         self.payload = payload
         self.response = response
         self.reddit = reddit
 
-        print('responding')
+        print('responding via ' + protocol)
         sys.stdout.flush()
 
-        if response['statusCode'] == 200:
-            reddit.redditor(str(payload.author)).message(response['subject'], response['message'])
-            payload.mark_read()
-        elif response['statusCode'] == 204:
-            payload.mark_read()
-        elif response['statusCode'] == 400:
-            reddit.redditor('/r/' + os.getenv("SUBREDDIT")).message(response['subject'], response['message'])
-            payload.mark_read()
-        else: 
-            payload.mark_read()
+        if protocol == 'reddit':
+            RedditMessageDispatcher(response=response, payload=payload, reddit=reddit)
+        elif protocol == 'slack':
+            SlackMessageDispatcher(response=response, payload=payload)
