@@ -1,44 +1,29 @@
 """ Rule Parse """
 import os
-import json
 import sys
+from slack import WebClient
+from slack.errors import SlackApiError
 
 # ============= Slack Message Dispatcher .py ============= #
-
 class SlackMessageDispatcher:
-    def __init__(self, response, payload):
-        self.payload = payload
-        self.response = response
+    if os.getenv("SLACK_SIGNING_SECRET") is None:
+        from os.path import join, dirname
+        from dotenv import load_dotenv
 
-        print('responding')
+        load_dotenv()
+
+    # Initialize a Web API client
+    slack_web_client = WebClient(token=os.getenv("SLACK_BOT_TOKEN"))
+
+    def __init__(self, response, payload):
+        print("response is")
         print(str(response))
         sys.stdout.flush()
-
-
-
-
-
-
-
-
-
-# class RedditMessageDispatcher:
-#     def __init__(self, response, payload, reddit):
-#         self.payload = payload
-#         self.response = response
-#         self.reddit = reddit
-
-#         print('responding')
-#         print(str(response))
-#         sys.stdout.flush()
-
-#         if response['statusCode'] == 200:
-#             reddit.redditor(str(payload.author)).message(response['subject'], response['message'])
-#             payload.mark_read()
-#         elif response['statusCode'] == 204:
-#             payload.mark_read()
-#         elif response['statusCode'] == 400:
-#             reddit.redditor('/r/' + os.getenv("SUBREDDIT")).message(response['subject'], response['message'])
-#             payload.mark_read()
-#         else: 
-#             payload.mark_read()
+        try:
+            response = self.slack_web_client.chat_postMessage(
+                channel=payload['channel'],
+                text=response['subject']
+            )
+        except SlackMessageDispatcher as e:
+            print(e)
+            sys.stdout.flush()
