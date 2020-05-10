@@ -17,9 +17,6 @@ if os.getenv("SLACK_SIGNING_SECRET") is None:
     load_dotenv()
 
 # Initialize a Flask app to host the events adapter
-
-print(os.getenv("SLACK_SIGNING_SECRET"))
-sys.stdout.flush()
 app = Flask(__name__)
 slack_events_adapter = SlackEventAdapter(os.getenv("SLACK_SIGNING_SECRET"), "/slack/events", app)
 

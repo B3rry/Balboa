@@ -2,13 +2,23 @@ import os
 import sys
 from .action_dispatch import ActionDispatch
 
+# ============= Action Request .py ============= #
+# Currently, is triggered _any_ time a message is recieved. In short, it identifes
+# actions, validates they can be performed, and triggers the relevant request when
+# valid. When a request exists, throws no errors, and has a matching entry in 
+# action_dispatch.py, the action will be dispatched.
+# 
+# The long term vision for this code is to transition to requesting "scripts" of
+# multiple actions.
+#
+# TODO - JRB: Right now we trigger a message reply to be sent directly in this file.
+# I think we'll want to eventually request a message (and logging, modmail, etc?)
+# get dispatched through a generic channel that we can control. (Esepcially 
+# important for enabling different types of messaging services) 
+# TODO - JRB: We also should eventually use this as a place to reference a 
+# dynamically generated manifest of actions.
+
 class ActionRequest:
-    # ActionRequest is triggered _any_ time a message is recieved. In short, init defines the list of possible actions, and known exceptions, and determines if the request will 
-    # fail or trigger an action to occur (which may or may not respond with a message). When a request exists, throws no errors, and has a matching entry in action_dispatch.py,
-    # the action will be dispatched. 
-    # TODO - JRB: Right now we trigger a message reply to be sent directly in this file. I think we'll want to eventually request a message (and logging, modmail, etc?) get 
-    # dispatched through a generic channel that we can control. (Esepcially important for enabling different types of messaging services) 
-    # TODO - JRB: We also should eventually use this as a place to reference a dynamically generated manifest of actions.
 
     def __init__(self, request, payload, reddit):
         self.reddit = reddit

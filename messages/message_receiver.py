@@ -29,10 +29,10 @@ class MessageReceiver:
     def __init__(self, reddit):
         # this should run through present protocols, look for presence and check for messages
         self.reddit = reddit
-        self.check_service("reddit")
+        self.check_service("slack")
 
     def check_service(self, protocol):
         if protocol == "reddit":
             RedditMessageReceiver(self.reddit)
         if protocol == "slack":
-            SlackMessageReceiver(self.reddit)
+            SlackMessageReceiver()

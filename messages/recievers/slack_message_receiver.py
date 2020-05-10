@@ -1,7 +1,11 @@
-""" Rule Parse """
 import os
-import json
 import sys
+import logging
+from flask import Flask
+from slack import WebClient
+from slackeventsapi import SlackEventAdapter
+import ssl as ssl_lib
+import certifi
 from actions.action_request import ActionRequest
 
 # ============= Slack Message Receiver .py ============= #
@@ -11,19 +15,33 @@ from actions.action_request import ActionRequest
 # [ ] 
 #
 # [TODO]: 
-
 class SlackMessageReceiver:
-    def __init__(self, reddit):
-        self.reddit = reddit
-        self.get_messages()
+    if os.getenv("SLACK_SIGNING_SECRET") is None:
+        from os.path import join, dirname
+        from dotenv import load_dotenv
 
-    def get_messages(self):
-        # get all messages, and pocess each one in order
-        for msg in self.reddit.inbox.unread():
-            # interpret inboud traffic
-            self.process_message(msg)
+        load_dotenv()
+    
+    app = Flask(__name__)
+    slack_events_adapter = SlackEventAdapter(os.getenv("SLACK_SIGNING_SECRET"), "/slack/events", app)
 
-    def process_message(self, msg):
-        # ensures message is properly encoded, as emoji and non utf characters will cause issues with the bot's ability to request actions
-        request = msg.subject.encode('utf-8')
-        ActionRequest(request, msg, self.reddit)
+    def __init__(self):
+        logger = logging.getLogger()
+        logger.setLevel(logging.DEBUG)
+        logger.addHandler(logging.StreamHandler())
+        ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
+        self.app.run(port=3000)
+
+    # pylint: disable=no-self-argument, no-member
+    @slack_events_adapter.on("message")
+    def message(payload):
+        event = payload.get("event", {})
+        channel_id = event.get("channel")
+        user_id = event.get("user")
+        print(payload)
+        print(event)
+        print(event['text'])
+        print(channel_id)
+        print(user_id)
+        sys.stdout.flush()
+    # pylint: enable=no-self-argument, no-member
