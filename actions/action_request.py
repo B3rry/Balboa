@@ -20,56 +20,66 @@ from .action_dispatch import ActionDispatch
 
 class ActionRequest:
 
-    def __init__(self, request, payload, reddit):
-        self.reddit = reddit
-
-        # `requestCommand` (dict, string:string): defines a list of message subjects that will cause the bot to dispatch a matching action, as defined in action_dispatch.py
-        requestCommand = {
-            'Ping': 'PINGPONG',
-            'Flair': 'UPDATE_FLAIR_TEXT',
-            'Set Flair': 'UPDATE_FLAIR_WITH_RULES',
-            'Update Rules': 'UPDATE_RULES',
-            'Bulk Update Flair': 'BULK_UPDATE_FLAIRS'
+    # `requestCommand` (dict, string:string): defines a list of message subjects that will cause the bot to dispatch a matching action, as defined in action_dispatch.py
+    requestCommand = {
+            'system': {
+                'Ping': 'PINGPONG',
+            },
+            'reddit': {
+                'Flair': 'UPDATE_FLAIR_TEXT',
+                'Set Flair': 'UPDATE_FLAIR_WITH_RULES',
+                'Update Rules': 'UPDATE_RULES',
+                'Bulk Update Flair': 'BULK_UPDATE_FLAIRS'
+            },
+            'slack': {
+                'hi': 'SAYHELLO',
+            }
         }
 
+    def __init__(self, protocol: str, request: str, payload, reddit):
+        self.reddit = reddit
+        
+        # Decoding the initial request aftern utf-8 sanitization
+        decodedRequest = request.decode('utf-8')
+        
         # `knownExceptions` (list, string): defines a list of message subjects that will cause the bot to mark the message as read and take no action.
         knownExceptions = [
             'post reply',
             'comment reply'
         ]
-
-        # Decoding the initial request aftern utf-8 sanitization
-        decodedRequest = request.decode('utf-8')
-
-        print('Message: /u/' + str(payload.author) + " sent '" + str(decodedRequest) + "': " + str(payload.body) )
-        sys.stdout.flush()
         
-        # Try to see if requestIdentifier (the subject line of the dispatched message) is in the requestCommand dict
-        # TODO - JRB: Suppport the passing of args in the requestIdentifier line
-        try:
-            requestIdentifier = requestCommand[decodedRequest]
+        # Get the identifier for the request made. Returns None when request has no match.
+        requestIdentifier = self.getRequestIdentifier(protocol=protocol, request=decodedRequest)
 
-        # Except messages where requestIdentifier does not exist in the requestCommand dict
-        except KeyError as e:
-            exception = decodedRequest
-            # If this is a non-actionable message (such as notifications about replies to posts or comments, mark them as read and take no action.)
-            if exception in knownExceptions:
-                print(str(decodedRequest) + " is on the list of known exceptions. Taking no action, marking message as read. ")
-                sys.stdout.flush()
-                payload.mark_read()
-            # Else dispatch a message and mark as read if the provided requestIdentifier doesn't exist in the requestCommand or knownExceptions dicts
-            else:
-                print(str(decodedRequest) + " does not match a known action or known exception. Replying with error message...")
-                sys.stdout.flush()
-                # TODO - JRB: I think this message should be more generic(?)
-                reddit.redditor(str(payload.author)).message('An Error Occurred', 'An error occured. Please contact the subreddit moderators: (Key Error: ' + str(e) + ')')
-                payload.mark_read()
-        # Catch all other excpetions
-        except Exception as e:
-            reddit.redditor(str(payload.author)).message('An Error Occurred', 'An error occured. Please contact the subreddit moderators: (Exception: ' + str(e) + ')')
-            payload.mark_read()
-        # If all conditions are met, dispatch the action.
-        else:
+        # Dispatch an action for valid requests.
+        if requestIdentifier is not None:
             print(str(decodedRequest) + " matches action " + str(requestIdentifier) + ". Dispatching Action...")
             sys.stdout.flush()
-            ActionDispatch(requestIdentifier, payload, self.reddit)
+            if protocol == "reddit":
+                ActionDispatch(requestIdentifier, payload, self.reddit)
+            elif protocol == "slack":
+                print("so slack things")
+                sys.stdout.flush()
+        elif decodedRequest in knownExceptions:
+            print(str(decodedRequest) + " is on the list of known exceptions. Taking no action, marking message as read. ")
+            sys.stdout.flush()
+            if protocol == "reddit":
+                payload.mark_read()
+        else:
+            print(str(decodedRequest) + " does not match a known action or known exception. Replying with error message...")
+            sys.stdout.flush()
+            if protocol == "reddit":
+                reddit.redditor(str(payload.author)).message('An Error Occurred', 'An error occured. Please contact the subreddit moderators.')
+                payload.mark_read()
+
+    # Parses requestCommand dict and returns the command identifier for valid requests.
+    # Prioritizes global commands 
+    def getRequestIdentifier(self, protocol: str, request: str):
+        identifier = None
+        if request in self.requestCommand['system']:
+            identifier = self.requestCommand['system'][request]
+        elif request in self.requestCommand[protocol]:
+            identifier = self.requestCommand[protocol][request]
+        else:
+            identifier = None
+        return identifier

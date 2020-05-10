@@ -26,4 +26,4 @@ class RedditMessageReceiver:
         # Sanitize inbound request
         request = msg.subject.encode('utf-8')
         # Request Action
-        ActionRequest(request, msg, self.reddit)
+        ActionRequest(protocol="reddit", request=request, payload=msg, reddit=self.reddit)

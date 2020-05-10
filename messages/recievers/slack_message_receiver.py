@@ -36,6 +36,8 @@ class SlackMessageReceiver:
     @slack_events_adapter.on("message")
     def message(payload):
         event = payload.get("event", {})
+        
+        request = event['text'].encode('utf-8')
         channel_id = event.get("channel")
         user_id = event.get("user")
         print(payload)
@@ -44,4 +46,6 @@ class SlackMessageReceiver:
         print(channel_id)
         print(user_id)
         sys.stdout.flush()
+
+        ActionRequest(protocol="slack", request=request, payload=event, reddit=None)
     # pylint: enable=no-self-argument, no-member
