@@ -24,6 +24,8 @@ class SlackMessageDispatcher:
                 channel=payload['channel'],
                 text=response['subject']
             )
+        # pylint: disable=catching-non-exception
         except SlackMessageDispatcher as e:
+        # pylint: enable=catching-non-exception
             print(e)
             sys.stdout.flush()
