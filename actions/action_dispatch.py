@@ -11,6 +11,8 @@ from actions.reddit.flair.rule_parse import Rules
 from actions.reddit.redditor.moderator_relationship import ModeratorRelationship
 from actions.reddit.redditor.banned_relationship import BannedRelationship
 from actions.slack.say_hello import SayHello
+from actions.slack.create_channel import CreateChannel
+from actions.slack.vote import Vote
 from messages.message_dispatcher import MessageDispatcher
 
 from actions.reddit.configuration.get_permissions import Permissions
@@ -28,7 +30,9 @@ class ActionDispatch:
             'UPDATE_FLAIR_WITH_RULES': lambda: UpdateFlairWithRules(payload, reddit).complete,
             'UPDATE_RULES': lambda: Rules(reddit).updateRules,
             'BULK_UPDATE_FLAIRS': lambda: BulkUpdateFromCSV(payload, reddit).complete,
-            'SAYHELLO': lambda: SayHello(payload).complete,
+            'CREATE_CHANNEL': lambda: CreateChannel(payload).complete,
+            'SAY_HELLO': lambda: SayHello(payload).complete,
+            'VOTE': lambda: Vote(payload).complete,
         }
 
         if protocol == 'reddit':

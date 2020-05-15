@@ -19,13 +19,35 @@ class SlackMessageDispatcher:
         print("response is")
         print(str(response))
         sys.stdout.flush()
-        try:
-            response = self.slack_web_client.chat_postMessage(
-                channel=payload['channel'],
-                text=response['subject']
-            )
-        # pylint: disable=catching-non-exception
-        except SlackMessageDispatcher as e:
-        # pylint: enable=catching-non-exception
-            print(e)
+
+        if response['statusCode'] == 200:
+            try:
+                response = self.slack_web_client.chat_postMessage(
+                    channel = payload['channel'],
+                    blocks = [{
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": response['subject']
+                        }
+                    }]
+                )
+            # pylint: disable=catching-non-exception
+            except SlackMessageDispatcher as e:
+            # pylint: enable=catching-non-exception
+                print(e)
+                sys.stdout.flush()
+        elif response['statusCode'] == 204:
+            print('204')
             sys.stdout.flush()
+        elif response['statusCode'] == 400:
+            print('400')
+            sys.stdout.flush()
+        else: 
+            print(str(response['statusCode']))
+            sys.stdout.flush()
+
+
+
+
+

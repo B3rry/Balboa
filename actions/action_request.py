@@ -32,7 +32,9 @@ class ActionRequest:
                 'Bulk Update Flair': 'BULK_UPDATE_FLAIRS'
             },
             'slack': {
-                'hi': 'SAYHELLO',
+                'make channel': 'CREATE_CHANNEL',
+                'hi': 'SAY_HELLO',
+                'vote': 'VOTE',
             }
         }
 
