@@ -1,3 +1,5 @@
+<img align="right" height="180" src="./balboa_emblem.png">
+
 # Balboa
 
 Balboa is a Python based bot that enables reddit.com's subreddit administrators to define, manage, and automate the process of handling changes to a user's flair. Features include the automatic handling and construction of flair text and CSS changes, including the dynamic constructions of these values via regex and time-based restrictions.
