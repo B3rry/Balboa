@@ -1,3 +1,4 @@
 praw==7.0.0
 configparser==3.5.0
 python-dotenv==0.13.0
+requests>=2.32.0 # not directly required, pinned by Snyk to avoid a vulnerability
